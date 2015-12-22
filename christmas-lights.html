@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href='https://fonts.googleapis.com/css?family=Droid+Sans+Mono' rel='stylesheet' type='text/css'>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="jsnow.js"></script>
+    <script src="jquery.animate-textshadow.min.js"></script>
+    <style>
+        #ecard, div {
+            font-style: normal;
+            font-weight: normal;
+            font-family: "Droid Sans Mono","Lucida Console","Andale Mono","Courier New","Courier",monospace;
+            font-size: 12px;
+            line-height: 12px;
+            display: block;
+            unicode-bidi: embed;
+            white-space: pre;
+        }
+        .lights
+        {
+            /*-webkit-border-radius: 10px;*/
+            /*-moz-border-radius: 10px;*/
+            /*border-radius: 10px;*/
+            text-shadow: 0 0 0 #000;
+        }
+        .blue
+        {
+            color: dodgerblue;
+            /*color:white;*/
+            font-weight: bold;
+        }
+        .red
+        {
+            color: rgba(255,0,0,0.35);
+
+        }
+        .yellow
+        {
+            color: yellow;
+            /*color:white;*/
+        }
+        .green
+        {
+            color: forestgreen;
+            /*color:white;*/
+        }
+    </style>
+    <script>
+        var cul = 1;
+
+        var colors = [];
+
+        colors['red'] = [];
+        colors['red']['r'] = 255;
+        colors['red']['g'] = 0;
+        colors['red']['b'] = 0;
+
+        //(30, 144, 255)
+        colors['blue'] = [];
+        colors['blue']['r'] = 30;
+        colors['blue']['g'] = 144;
+        colors['blue']['b'] = 255;
+
+        //2, 132, 130
+        colors['green'] = [];
+        colors['green']['r'] = 2;
+        colors['green']['g'] = 132;
+        colors['green']['b'] = 130;
+
+        // RGB: 255, 204, 0
+        colors['yellow'] = [];
+        colors['yellow']['r'] = 255;
+        colors['yellow']['g'] = 204;
+        colors['yellow']['b'] = 0;
+
+        var lights_types = [];
+
+        lights_types[1] = 'blue';
+        lights_types[5] = 'blue';
+        lights_types[9] = 'blue';
+
+        lights_types[2] = 'yellow';
+        lights_types[6] = 'yellow';
+        lights_types[10] = 'yellow';
+
+        lights_types[3] = 'green';
+        lights_types[7] = 'green';
+        lights_types[11] = 'green';
+
+        lights_types[4] = 'red';
+        lights_types[8] = 'red';
+        lights_types[12] = 'red';
+
+        function turnOn(light, r, g, b)
+        {
+            document.getElementById('l'+light).style.textShadow = '2px 2px 1px rgba('+r+','+g+','+b+',0.5)';
+            document.getElementById('l'+light).style.fontWeight = 'bold';
+            document.getElementById('l'+light).style.color = 'rgba('+r+','+g+','+b+', 1.0)';
+        }
+
+        function turnOnFading(light, r, g, b, ms)
+        {
+//            document.getElementById('l'+light).style.textShadow = '2px 2px 1px rgba('+r+','+g+','+b+',0.5)';
+//            document.getElementById('l'+light).style.fontWeight = 'bold';
+//            document.getElementById('l'+light).style.color = 'rgba('+r+','+g+','+b+', 1.0)';
+
+            $('l'+light).animate({textShadow: "rgba('+r+','+g+','+b+',0.5) 2px 2px 1px"}, ms);
+        }
+
+
+
+
+        function turnOff(light, r, g, b)
+        {
+            document.getElementById('l'+light).style.textShadow = 'none';
+            document.getElementById('l'+light).style.fontWeight = 'normal';
+            document.getElementById('l'+light).style.color = 'rgba('+r+','+g+','+b+', 0.35)';
+        }
+
+        function turnOnTrack(color)
+        {
+            for(i=1; i<=12; i++)
+            {
+                if(lights_types[i] == color)
+                {
+                    turnOn(i, colors[color]['r'], colors[color]['g'], colors[color]['b']);
+                }
+            }
+        }
+
+        function turnOffTrack(color)
+        {
+            for(i=1; i<=12; i++)
+            {
+                if(lights_types[i] == color)
+                {
+                    turnOff(i, colors[color]['r'], colors[color]['g'], colors[color]['b']);
+                }
+            }
+        }
+
+        // SLO-GLO sequence
+        function t_by_t(step)
+        {
+            switch(step)
+            {
+                case 1:
+                    turnOnTrack('red');
+                    turnOnTrack('green');
+                    turnOffTrack('blue');
+                    turnOffTrack('yellow');
+                    setTimeout(function() { t_by_t(2) }, 100);
+                    break;
+//                case 2:
+//                    turnOffTrack('red');
+//                    turnOffTrack('green');
+//                    turnOnTrack('blue');
+//                    turnOnTrack('yellow');
+//                    setTimeout(function() { t_by_t(1) }, 250);
+//                    break;
+                case 2:
+                    turnOffTrack('red');
+                    turnOffTrack('green');
+                    setTimeout(function() { t_by_t(3) }, 80);
+                    break;
+                case 3:
+                    turnOnTrack('red');
+                    turnOnTrack('green');
+                    setTimeout(function() { t_by_t(4) }, 80);
+                    break;
+                case 4:
+                    turnOffTrack('red');
+                    turnOffTrack('green');
+                    setTimeout(function() { t_by_t(5) }, 80);
+                    break;
+                case 5:
+                    turnOnTrack('red');
+                    turnOnTrack('green');
+                    setTimeout(function() { t_by_t(6) }, 80);
+                    break;
+                case 6:
+                    turnOffTrack('red');
+                    turnOffTrack('green');
+                    setTimeout(function() { t_by_t(7) }, 80);
+                    break;
+
+
+                case 7:
+                    turnOnTrack('blue');
+                    turnOnTrack('yellow');
+                    setTimeout(function() { t_by_t(8) }, 80);
+                    break;
+                case 8:
+                    turnOffTrack('blue');
+                    turnOffTrack('yellow');
+                    setTimeout(function() { t_by_t(9) }, 80);
+                    break;
+                case 9:
+                    turnOnTrack('blue');
+                    turnOnTrack('yellow');
+                    setTimeout(function() { t_by_t(10) }, 80);
+                    break;
+                case 10:
+                    turnOffTrack('blue');
+                    turnOffTrack('yellow');
+                    setTimeout(function() { t_by_t(11) }, 80);
+                    break;
+                case 11:
+                    turnOnTrack('blue');
+                    turnOnTrack('yellow');
+                    setTimeout(function() { t_by_t(12) }, 80);
+                    break;
+                case 12:
+                    turnOffTrack('blue');
+                    turnOffTrack('yellow');
+                    setTimeout(function() { t_by_t(13) }, 80);
+                    break;
+                //////////
+                case 13:
+                    turnOnTrack('red');
+                    turnOnTrack('green');
+                    turnOffTrack('blue');
+                    turnOffTrack('yellow');
+                    setTimeout(function() { t_by_t(14) }, 160);
+                    break;
+                case 14:
+                    turnOffTrack('red');
+                    turnOffTrack('green');
+                    turnOnTrack('blue');
+                    turnOnTrack('yellow');
+                    setTimeout(function() { t_by_t(15) }, 160);
+                    break;
+                case 15:
+                    turnOnTrack('red');
+                    turnOnTrack('green');
+                    turnOffTrack('blue');
+                    turnOffTrack('yellow');
+                    setTimeout(function() { t_by_t(16) }, 160);
+                    break;
+                case 16:
+                    turnOffTrack('red');
+                    turnOffTrack('green');
+                    turnOnTrack('blue');
+                    turnOnTrack('yellow');
+                    setTimeout(function() { t_by_t(17) }, 160);
+                    break;
+                case 17:
+                    turnOnTrack('red');
+                    turnOnTrack('green');
+                    turnOffTrack('blue');
+                    turnOffTrack('yellow');
+                    setTimeout(function() { t_by_t(18) }, 160);
+                    break;
+                case 18:
+                    turnOffTrack('red');
+                    turnOffTrack('green');
+                    turnOnTrack('blue');
+                    turnOnTrack('yellow');
+                    setTimeout(function() { t_by_t(1) }, 160);
+                    break;
+
+
+
+
+            }
+        }
+
+        /*
+        function lights()
+        {
+            if (document.getElementById("light_1").style.backgroundColor == "red") window['cul'] = 2;
+            if (document.getElementById("light_1").style.backgroundColor == "rgb(0, 158, 206)") window['cul'] = 3;
+            if (document.getElementById("light_1").style.backgroundColor == "rgb(0, 128, 0)") window['cul'] = 4;
+            if (document.getElementById("light_1").style.backgroundColor == "rgb(255, 158, 0)") window['cul'] = 1;
+            for(i = 1; i<=24; i++)
+            {
+                if(window['cul'] > 4) window['cul'] = 1;
+                if(window['cul'] == 1) document.getElementById("light_"+i).style.backgroundColor = "red";
+                if(window['cul'] == 2) document.getElementById("light_"+i).style.backgroundColor = "rgb(0, 158, 206)";
+                if(window['cul'] == 3) document.getElementById("light_"+i).style.backgroundColor = "rgb(0, 128, 0)";
+                if(window['cul'] == 4) document.getElementById("light_"+i).style.backgroundColor = "rgb(255, 158, 0)";
+                window['cul']++;
+
+
+            }
+        }*/
+        //var intervalul = setInterval(function () { lights(); }, 450);
+        $(function() {
+            $().jSnow();
+        });
+    </script>
+    <title>CRACIUN FERICIT!</title>
+</head>
+<body style="margin:0;">
+<div style="height:100%; width:100%;">
+<span id="ecard">
+
+             *
+            /.\
+           /<span id="l1" class="lights blue">*</span>.'\
+           /'<span id="l2" class="lights yellow">*</span>'\
+          /.''<span id="l3" class="lights green">*</span>'\              ':.
+          /.'.<span id="l4" class="lights red">*</span>.\                []______
+         /'.'.<span id="l5" class="lights blue">*</span>.'\               /\      \
+         /'.''<span id="l6" class="lights yellow">*</span>'.\           ___/  \__/\__\__
+        /.'<span id="l9" class="lights blue">*</span>'<span id="l8" class="lights red">*</span>'<span id="l7" class="lights green">*</span>'.\ --------/\___\ |''''''|__\------
+        /<span id="l10" class="lights yellow">*</span>'.'.'.'.\         ||&blk12;&blk12;&blk12;| |''||''|''|
+       /'.'<span id="l11" class="lights green">*</span>'<span id="l12" class="lights red">*</span>'.'.'\        ``````````))``````
+       ^^^^^[_]^^^^^
+<!--
+       ':.
+         []_____
+        /\      \
+    ___/  \__/\__\__
+---/\___\ |''''''|__\-- ---
+   ||'''| |''||''|''|
+   ``````````))``````
+
+-->
+    <!--
+                                   /\
+                              /\  //\\
+                       /\    //\\///\\\        /\
+                      //\\  ///\////\\\\  /\  //\\
+         /\          /  ^ \/^ ^/^  ^  ^ \/^ \/  ^ \
+        / ^\    /\  / ^   /  ^/ ^ ^ ^   ^\ ^/  ^^  \
+       /^   \  / ^\/ ^ ^   ^ / ^  ^    ^  \/ ^   ^  \       *
+      /  ^ ^ \/^  ^\ ^ ^ ^   ^  ^   ^   ____  ^   ^  \     /|\
+     / ^ ^  ^ \ ^  _\___________________|  |_____^ ^  \   /||o\
+    / ^^  ^ ^ ^\  /______________________________\ ^ ^ \ /|o|||\
+   /  ^  ^^ ^ ^  /________________________________\  ^  /|||||o|\
+  /^ ^  ^ ^^  ^    ||___|___||||||||||||___|__|||      /||o||||||\
+ / ^   ^   ^    ^  ||___|___||||||||||||___|__|||          | |
+/ ^ ^ ^  ^  ^  ^   ||||||||||||||||||||||||||||||oooooooooo| |ooooooo
+ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+-->
+
+</span>
+</div>
+
+<script>
+    //$("#ecard").bigText();
+</script>
+
+
+<!--
+<pre id="ecard">
+.:<span id="light_1">*~*</span>:._.:<span id="light_2">*~*</span>:._.:<span id="light_3">*~*</span>:._.:<span id="light_4">*~*</span>:._.:<span id="light_5">*~*</span>:._.:<span id="light_6">*~*</span>:.
+.                                             .
+.     *                                       .
+.    /.\                                      .
+.   /..'\         C R &#258; C I U N               .
+.   /'.'\                                     .
+.  /.''.'\                F E R I C I T !!!   .
+.  /.'.'.\                                    .
+. /'.''.'.\                                   .
+. ^^^[_]^^^                                   .
+.                                             .
+.                                             .
+.                                             .
+.:<span id="light_7">*~*</span>:._.:<span id="light_8">*~*</span>:._.:<span id="light_9">*~*</span>:._.:<span id="light_10">*~*</span>:._.:<span id="light_11">*~*</span>:._.:<span id="light_12">*~*</span>:.
+
+
+.:<span id="light_13">*~*</span>:._.:<span id="light_14">*~*</span>:._.:<span id="light_15">*~*</span>:._.:<span id="light_16">*~*</span>:._.:<span id="light_17">*~*</span>:._.:<span id="light_18">*~*</span>:.
+.                                             .
+.                                 .      .    .
+.                                 _\/  \/_    .
+.                                  _\/\/_     .
+.     S &#258; R B &#258; T O R I        _\_\_\/\/_/_/_ .
+.                               / /_/\/\_\ \  .
+.         F E R I C I T E !!!      _/\/\_     .
+.                                  /\  /\     .
+.                                 '      '    .
+.                                             .
+.                                             .
+.                        JS programming by gxg.
+.:<span id="light_19">*~*</span>:._.:<span id="light_20">*~*</span>:._.:<span id="light_21">*~*</span>:._.:<span id="light_22">*~*</span>:._.:<span id="light_23">*~*</span>:._.:<span id="light_24">*~*</span>:.
+
+</pre>
+
+<script>
+    for(i = 1; i<=24; i++)
+    {
+        document.getElementById("light_"+i).style.color = "white";
+
+        document.getElementById("light_"+i).style.borderRadius = "5px";
+
+    }
+</script>
+-->
+<div style="position:absolute; right:50px; bottom:50px; text-align: right;">
+    <label for="size">Dimensiune e-card: </label><input id="size" type="number" value="30" max="30" onchange="document.getElementById('ecard').style.fontSize=this.value+'px'; document.getElementById('ecard').style.lineHeight=this.value+'px'; " /><br />
+    <a href="#" onclick="t_by_t(1); this.style.display = 'none';">Start SLO-GLO</a>
+    <!--<label for="speed">Viteza joc: </label><input id="speed" type="number" value="5" onchange="clearInterval(intervalul); intervalul = setInterval(function () { lights(); }, this.value*100);" />-->
+
+</div>
+
+
+
+</body>
+</html>
